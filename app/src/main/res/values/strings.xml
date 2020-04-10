@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Tulsa Zoo</string>
+
+
+    <!-- Animal Descriptions -->
+    <string name="california_sea_lion_des">California Sea Lions are mammals. They must breathe at the surface and hold their breath while underwater.</string>
+    <string name="american_alligator_des">American alligators are predators with many special adaptations for hunting in dark waters.</string>
+    <string name="aldabra_tortoise_des">Aldabra tortoises are specially adapted for island life.</string>
+    <string name="african_penguin_des">African penguins are birds. Despite their heritage, they are aquatic predators and are specially adapted to life at sea.</string>
+    <string name="african_lion_des">Unlike other cats, lions are social animals that are specially adapted for communal life in the pride.</string>
+    <string name="asian_elephant_des">Elephants have specialized adaptations to accommodate their large size.</string>
+    <string name="chimp_des">Chimpanzees are social animals and specially adapted for communal troop life.</string>
+    <string name="chinese_alligator_des">Chinese alligators are ectothermic; they rely on the outside environment to regulate their body temperatures.</string>
+    <string name="giraffe_des">Although giraffes are mostly known for their impressive height, the rest of a giraffe’s body is super-sized as well.</string>
+    <string name="komodo_dragon_des">Komodo dragons possess many adaptations that allowed them to ascend to royal heights.</string>
+    <string name="malayan_tiger_des">Tigers have many adaptations to help them live in a variety of habitats across Asia.</string>
+    <string name="snow_leopard_des">Snow leopards are specially adapted for mountain life.</string>
+    <string name="white_rhino_des">The horns on white rhinos are more than decorative. Rhinos use their horns for many different functions.</string>
+
+
+    <!-- Mapbox Resources -->
+    <string name="access_token">pk.eyJ1IjoiYnJhbmRvbmljZWJlcmciLCJhIjoiY2s3MTdjMjJpMDNuejNndGtrdDVyb3phciJ9.Z0Kg4QSKS9MeCvbfdFskSA</string>
+    <string name="title_activity_map_box">MapBoxActivity</string>
+
+
+    <!-- Menu Items -->
+    <string name="title_activity_plan_a_visit">Plan a Visit</string>
+    <string name="animals_text">Animals</string>
+    <string name="plan_a_visit">Plan a Visit</string>
+    <string name="settings_text">Settings</string>
+
+    <!-- Legal Text -->
+    <string name="purchase_disclosure">Tickets are valid during regular zoo hours only, and may not be used for special events or after hour events. Children age 2 and under are free. Tulsa Zoo Members are free.</string>
+    <string name="zoo_availability">The Tulsa Zoo is open 363 days a year. The zoo is only closed on Christmas Day and the third Friday in June.</string>
+
+</resources>

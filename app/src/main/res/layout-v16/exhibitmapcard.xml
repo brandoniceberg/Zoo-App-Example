@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/animal_card"
+        android:transitionName="infoHolder"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="5pt"
+        app:cardCornerRadius="5pt"
+        app:cardElevation="5dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/animalImageView"
+                    android:transitionName="animalImage"
+                    android:layout_width="50pt"
+                    android:layout_height="50pt"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/african_peguin" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/animalNameTextView"
+                        android:transitionName="animalName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5pt"
+                        android:text="African Penguin"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        app:fontFamily="@font/merriweather_bold" />
+
+                    <TextView
+                        android:id="@+id/bioNameTextView"
+                        android:transitionName="bioName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5pt"
+                        android:layout_marginLeft="5pt"
+                        android:text="Spheniscus demersus"
+                        android:textSize="13sp"
+                        android:textStyle="italic"
+                        app:fontFamily="@font/merriweather_light" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <Preference
+        app:key="profile"
+        android:title="Profile"/>
+
+    <SwitchPreference
+        app:key="auto_theme"
+        android:title="Automatic Dark Mode"
+        android:summary="Use system light/dark mode setting"
+        android:defaultValue="true"/>
+
+    <SwitchPreference
+        app:key="theme"
+        android:title="Dark Mode"
+        android:summary="Use Tulsa Zoo with a dark interface" />
+
+    <Preference
+        app:key="share_feedback"
+        android:title="Share Feedback"
+        android:summary="Report technical issues or suggest new features"/>
+
+    <Preference
+        app:key="about"
+        android:title="About"
+        android:summary="Version: 1.0.0"/>
+
+
+</PreferenceScreen>

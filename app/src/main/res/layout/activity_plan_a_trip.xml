@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".PlanATrip">
+
+    <ImageView
+        android:id="@+id/tzooImageView"
+        android:layout_width="match_parent"
+        android:layout_height="175pt"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/tzoo_sign" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10pt"
+        android:layout_marginTop="5pt"
+        android:layout_marginBottom="5pt"
+        android:text="Buy Tickets:"
+        android:textSize="25sp"
+        app:fontFamily="@font/merriweather_bold"
+        android:layout_marginStart="10pt" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10pt"
+        android:layout_marginTop="5pt"
+        android:text="$8.00"
+        android:textSize="18sp"
+        app:fontFamily="@font/merriweather_bold" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10pt"
+        android:text="Child (ages 3-11)"
+        android:textSize="12sp"
+        app:fontFamily="@font/merriweather_light"
+        android:layout_marginStart="10pt" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10pt"
+        android:layout_marginTop="5pt"
+        android:text="$12.00"
+        android:textSize="18sp"
+        app:fontFamily="@font/merriweather_bold"
+        android:layout_marginStart="10pt" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10pt"
+        android:text="Adult (ages 12-64)"
+        android:textSize="12sp"
+        app:fontFamily="@font/merriweather_light"
+        android:layout_marginStart="10pt" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10pt"
+        android:layout_marginTop="5pt"
+        android:text="$10.00"
+        android:textSize="18sp"
+        app:fontFamily="@font/merriweather_bold"
+        android:layout_marginStart="10pt" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10pt"
+        android:text="Senior (ages 65+)"
+        android:textSize="12sp"
+        app:fontFamily="@font/merriweather_light"
+        android:layout_marginStart="10pt" />
+
+    <TextView
+        android:id="@+id/legalTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10pt"
+        android:layout_marginTop="5pt"
+        android:layout_marginRight="10pt"
+        android:text="@string/purchase_disclosure"
+        app:fontFamily="@font/merriweather_light" />
+
+    <Button
+        android:id="@+id/purchaseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Buy Tickets Online"
+        android:layout_marginLeft="10pt"
+        android:layout_marginTop="5pt"
+        android:layout_marginRight="10pt"
+        />
+
+</LinearLayout>
