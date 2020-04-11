@@ -16,8 +16,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.iceberg.zooapp.classes.Animal
 import com.iceberg.zooapp.R
 import com.iceberg.zooapp.mapActivity
+import java.lang.ref.WeakReference
 
-class MapAdapter(private val listOfAnimals: ArrayList<Animal>, val context: Context, private val activity: Activity): RecyclerView.Adapter<MapAdapter.ViewHolder>() {
+class MapAdapter(private val listOfAnimals: ArrayList<Animal>, private val activity: WeakReference<Activity>): RecyclerView.Adapter<MapAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val animalImage: ImageView = itemView.findViewById(R.id.animalImageView)
@@ -41,7 +42,7 @@ class MapAdapter(private val listOfAnimals: ArrayList<Animal>, val context: Cont
         holder.animalName.text = animal.name
         holder.bioName.text = animal.bioname
         holder.animalCard.setOnClickListener {
-            val intent = Intent(context, mapActivity::class.java)
+            val intent = Intent(holder.animalCard.context, mapActivity::class.java)
 
             intent.putExtra("name", animal.name)
             intent.putExtra("description", animal.description)
@@ -54,11 +55,11 @@ class MapAdapter(private val listOfAnimals: ArrayList<Animal>, val context: Cont
             intent.putExtra("bioname", animal.bioname)
 
             if (Build.VERSION.SDK_INT >= 21) {
-                val options = ActivityOptions.makeSceneTransitionAnimation(activity, holder.animalImage, "animalImage")
+                val options = ActivityOptions.makeSceneTransitionAnimation(activity.get(), holder.animalImage, "animalImage")
 
-                    context.startActivity(intent, options.toBundle())
+                    holder.animalCard.context.startActivity(intent, options.toBundle())
             }else {
-                context.startActivity(intent)
+                holder.animalCard.context.startActivity(intent)
             }
         }
     }

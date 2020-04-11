@@ -29,6 +29,7 @@ import kotlinx.android.synthetic.main.activity_map.*
 import kotlinx.android.synthetic.main.activity_map.animalImageView
 import kotlinx.android.synthetic.main.exhibitmapcard.*
 import kotlinx.coroutines.*
+import java.lang.ref.WeakReference
 
 class ExhibitMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -73,7 +74,7 @@ class ExhibitMapActivity : AppCompatActivity(), OnMapReadyCallback {
         mapRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
 
 
-        mapRecyclerView.adapter = MapAdapter(listOfAnimals, this, this)
+        mapRecyclerView.adapter = MapAdapter(listOfAnimals, WeakReference(this))
 
         val snapHelper = PagerSnapHelper()
         snapHelper.attachToRecyclerView(mapRecyclerView)
