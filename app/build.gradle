@@ -49,6 +49,9 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+    //Performance Libraries
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
+
     //View Libraries
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
@@ -58,7 +61,7 @@ dependencies {
     implementation 'androidx.biometric:biometric:1.0.1'
 
     //WebView Libraries
-    implementation 'com.android.support:customtabs:23.3.0'
+    implementation 'androidx.browser:browser:1.2.0'
     implementation 'androidx.webkit:webkit:1.2.0'
 
     //MapBox Dependency
