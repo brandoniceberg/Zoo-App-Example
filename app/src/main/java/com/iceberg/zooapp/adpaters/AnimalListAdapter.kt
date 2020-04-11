@@ -15,8 +15,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.iceberg.zooapp.R
 import com.iceberg.zooapp.classes.Animal
 import com.iceberg.zooapp.mapActivity
+import java.lang.ref.WeakReference
 
-class AnimalListAdapter(private val listOfAnimals: ArrayList<Animal>, val context: Context, private val activity: Activity): RecyclerView.Adapter<AnimalListAdapter.ViewHolder>() {
+class AnimalListAdapter(private val listOfAnimals: ArrayList<Animal>, private val activity: WeakReference<Activity>): RecyclerView.Adapter<AnimalListAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val animalName: TextView = itemView.findViewById(R.id.nameTextView)
@@ -40,7 +41,7 @@ class AnimalListAdapter(private val listOfAnimals: ArrayList<Animal>, val contex
         holder.animalDescription.text = animal.bioname
         holder.animalImage.setImageResource(animal.image)
         holder.animalCard.setOnClickListener {
-            val intent = Intent(context, mapActivity::class.java)
+            val intent = Intent(holder.animalCard.context, mapActivity::class.java)
 
             intent.putExtra("name", animal.name)
             intent.putExtra("description", animal.description)
@@ -52,10 +53,10 @@ class AnimalListAdapter(private val listOfAnimals: ArrayList<Animal>, val contex
             intent.putExtra("status", animal.status)
             intent.putExtra("bioname", animal.bioname)
             if (Build.VERSION.SDK_INT >= 21) {
-                val options = ActivityOptions.makeSceneTransitionAnimation(activity, holder.animalImage, "animalImage")
-                context.startActivity(intent, options.toBundle())
+                val options = ActivityOptions.makeSceneTransitionAnimation(activity.get(), holder.animalImage, "animalImage")
+                holder.animalCard.context.startActivity(intent, options.toBundle())
             }else {
-                context.startActivity(intent)
+                holder.animalCard.context.startActivity(intent)
             }
         }
     }

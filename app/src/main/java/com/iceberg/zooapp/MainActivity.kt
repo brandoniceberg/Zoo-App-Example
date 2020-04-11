@@ -13,6 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.ref.WeakReference
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
         animalListView.layoutManager = LinearLayoutManager(this)
 
-        animalListView.adapter = AnimalListAdapter(listOfAnimals, this, this)
+        animalListView.adapter = AnimalListAdapter(listOfAnimals, WeakReference(this))
 
     }
 

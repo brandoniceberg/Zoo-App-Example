@@ -12,7 +12,7 @@ import com.iceberg.zooapp.ExhibitMapActivity
 import com.iceberg.zooapp.classes.Exhibits
 import com.iceberg.zooapp.R
 
-class ExhibitRecyclerViewAdapter(private val listOfExhibits: ArrayList<Exhibits>, val context: Context): RecyclerView.Adapter<ExhibitRecyclerViewAdapter.ViewHolder>() {
+class ExhibitRecyclerViewAdapter(private val listOfExhibits: ArrayList<Exhibits>): RecyclerView.Adapter<ExhibitRecyclerViewAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val image: ImageView = itemView.findViewById(R.id.exhibitImageView)
@@ -32,9 +32,9 @@ class ExhibitRecyclerViewAdapter(private val listOfExhibits: ArrayList<Exhibits>
         val exhibit = listOfExhibits[position]
         holder.image.setImageResource(exhibit.img)
         holder.parentLayout.setOnClickListener {
-            val intent = Intent(context, ExhibitMapActivity::class.java)
+            val intent = Intent(holder.parentLayout.context, ExhibitMapActivity::class.java)
             intent.putExtra("exhibit", exhibit.name)
-            context.startActivity(intent)
+            holder.parentLayout.context.startActivity(intent)
         }
     }
 }

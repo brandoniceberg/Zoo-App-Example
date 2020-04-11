@@ -40,7 +40,7 @@ class ExhibitList : AppCompatActivity() {
         }
 
         exhibitListView.layoutManager = LinearLayoutManager(this)
-        exhibitListView.adapter = ExhibitRecyclerViewAdapter(listOfExhibits, this)
+        exhibitListView.adapter = ExhibitRecyclerViewAdapter(listOfExhibits)
 
 
     }
