@@ -2,7 +2,6 @@ package com.iceberg.zooapp.adpaters
 
 import android.app.Activity
 import android.app.ActivityOptions
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.view.LayoutInflater
@@ -12,8 +11,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.iceberg.zooapp.R
-import com.iceberg.zooapp.classes.Animal
+import com.iceberg.zooapp.models.Animal
 import com.iceberg.zooapp.mapActivity
 import java.lang.ref.WeakReference
 
@@ -39,7 +39,7 @@ class AnimalListAdapter(private val listOfAnimals: ArrayList<Animal>, private va
         val animal: Animal = listOfAnimals[position]
         holder.animalName.text = animal.name
         holder.animalDescription.text = animal.bioname
-        holder.animalImage.setImageResource(animal.image)
+        Glide.with(holder.animalImage.context).load(animal.image).into(holder.animalImage)
         holder.animalCard.setOnClickListener {
             val intent = Intent(holder.animalCard.context, mapActivity::class.java)
 

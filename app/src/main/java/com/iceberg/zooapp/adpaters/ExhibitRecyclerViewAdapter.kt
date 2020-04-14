@@ -1,6 +1,5 @@
 package com.iceberg.zooapp.adpaters
 
-import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -8,8 +7,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.iceberg.zooapp.ExhibitMapActivity
-import com.iceberg.zooapp.classes.Exhibits
+import com.iceberg.zooapp.models.Exhibits
 import com.iceberg.zooapp.R
 
 class ExhibitRecyclerViewAdapter(private val listOfExhibits: ArrayList<Exhibits>): RecyclerView.Adapter<ExhibitRecyclerViewAdapter.ViewHolder>() {
@@ -30,7 +30,7 @@ class ExhibitRecyclerViewAdapter(private val listOfExhibits: ArrayList<Exhibits>
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val exhibit = listOfExhibits[position]
-        holder.image.setImageResource(exhibit.img)
+        Glide.with(holder.image.context).load(exhibit.img).into(holder.image)
         holder.parentLayout.setOnClickListener {
             val intent = Intent(holder.parentLayout.context, ExhibitMapActivity::class.java)
             intent.putExtra("exhibit", exhibit.name)

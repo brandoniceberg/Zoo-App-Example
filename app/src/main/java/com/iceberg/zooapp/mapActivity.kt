@@ -9,6 +9,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
 import com.google.android.gms.maps.model.LatLng
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.Geometry
@@ -29,7 +30,7 @@ class mapActivity: AppCompatActivity(), OnMapReadyCallback{
     private val REQUEST_CODE = 5694
 
     var animalName: String? = null
-    var animalImage: Int? = null
+    var animalImage: String? = null
     var animalHabitat: String? = null
     var animalDescription: String? = null
     var animalLongitude: Double? = null
@@ -47,7 +48,7 @@ class mapActivity: AppCompatActivity(), OnMapReadyCallback{
         val bundle: Bundle = intent.extras!!
         animalName = bundle.getString("name")
         animalDescription = bundle.getString("description")
-        animalImage = bundle.getInt("image")
+        animalImage = bundle.getString("image")
         animalHabitat = bundle.getString("habitat")
         animalStatus = bundle.getInt("status")
         animalLatitude = bundle.getDouble("latitude")
@@ -57,7 +58,7 @@ class mapActivity: AppCompatActivity(), OnMapReadyCallback{
         val animalFood = bundle.getInt("food")
 
         //Fill views with information
-        animalImageView.setImageResource(animalImage!!)
+        Glide.with(this).load(animalImage).into(animalImageView)
         animalNameTextView.text = animalName
         descriptionTextView.text = animalDescription
         habitatTextView.text = "Native Habitat: $animalHabitat"
