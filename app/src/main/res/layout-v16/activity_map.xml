@@ -45,11 +45,11 @@
 
                     <ImageView
                         android:id="@+id/animalImageView"
-                        android:transitionName="animalImage"
                         android:layout_width="50pt"
-                        android:scaleType="centerCrop"
                         android:layout_height="50pt"
-                        app:srcCompat="@drawable/chimpanzee" />
+                        android:scaleType="centerCrop"
+                        android:transitionName="animalImage"
+                        app:srcCompat="@drawable/fingerprint_dialog_error_to_fp" />
                 </androidx.cardview.widget.CardView>
 
                 <LinearLayout

@@ -24,13 +24,13 @@ class ExhibitListRepo {
         ))
 
         dataset.add(Exhibits(
-            "Conservation Center",
-            "https://tulsazoo.org/wp-content/uploads/2015/08/ConservationCenter_NickW_Header.jpg"
+            "Chimpanzee Connection",
+            "https://tulsazoo.org/wp-content/uploads/2015/08/Chimp1_TulsaZoo_Header.jpg"
         ))
 
         dataset.add(Exhibits(
-            "Chimpanzee Connection",
-            "https://tulsazoo.org/wp-content/uploads/2015/08/Chimp1_TulsaZoo_Header.jpg"
+            "Conservation Center",
+            "https://tulsazoo.org/wp-content/uploads/2015/08/ConservationCenter_NickW_Header.jpg"
         ))
 
         dataset.add(Exhibits(

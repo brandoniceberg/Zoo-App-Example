@@ -29,7 +29,7 @@
                     android:layout_width="50pt"
                     android:layout_height="50pt"
                     android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/african_peguin" />
+                    app:srcCompat="@drawable/fingerprint_dialog_error_to_fp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
