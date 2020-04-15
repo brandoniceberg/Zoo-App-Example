@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.iceberg.zooapp.adpaters.MapAdapter
 import com.iceberg.zooapp.models.Animal
+import com.iceberg.zooapp.viewModels.ExhibitMapViewModel
 import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
@@ -31,12 +32,8 @@ class ExhibitMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mapView: MapView
     private val REQUEST_CODE: Int = 5694
-    private var animalLatitude: Double? = null
-    private var animalLongitude: Double? = null
-    private var animalName: String? = null
     private var exhibitName: String? = null
-
-    private var listOfAnimals = ArrayList<Animal>()
+    private val model = ExhibitMapViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,34 +44,34 @@ class ExhibitMapActivity : AppCompatActivity(), OnMapReadyCallback {
         val bundle: Bundle = intent.extras!!
         exhibitName = bundle.getString("exhibit")
 
+        model.init(exhibitName!!)
+
         val actionBar: ActionBar = supportActionBar!!
         actionBar.setHomeAsUpIndicator(R.drawable.white_back_arrow)
         actionBar.title = exhibitName
         actionBar.setDisplayShowHomeEnabled(true)
 
-        if (Build.VERSION.SDK_INT >= 16){
-            map.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-        }
+        map.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 
 
         mapView = map
         map.onCreate(savedInstanceState)
         map.getMapAsync(this)
 
+        initRecyclerView()
+
+        checkPermissions()
+    }
+
+    private fun initRecyclerView(){
         mapRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
-
-
-        mapRecyclerView.adapter = MapAdapter(listOfAnimals, WeakReference(this))
+        mapRecyclerView.adapter = MapAdapter(model.getAnimals().value!!, WeakReference(this))
 
         val snapHelper = PagerSnapHelper()
         snapHelper.attachToRecyclerView(mapRecyclerView)
 
 
-        if (Build.VERSION.SDK_INT >= 18){
-            mapRecyclerView.overlay
-        }
-
-        checkPermissions()
+        mapRecyclerView.overlay
     }
 
     private fun checkPermissions(){
@@ -110,10 +107,10 @@ class ExhibitMapActivity : AppCompatActivity(), OnMapReadyCallback {
         mapboxMap.setMinZoomPreference(15.60)
         mapboxMap.uiSettings.setAttributionMargins(50, 0 , 0 , 500)
 
-        for (animal in listOfAnimals){
-            animalLatitude = animal.latitude
-            animalLongitude = animal.longitude
-            animalName = animal.name
+        for (animal in model.getAnimals().value!!){
+            val animalLatitude = animal.latitude
+            val animalLongitude = animal.longitude
+            val animalName = animal.name
             val animalLocation = com.mapbox.mapboxsdk.geometry.LatLng(animalLatitude!!, animalLongitude!!)
             mapboxMap.addMarker(MarkerOptions().position(animalLocation).title("$animalName Exhibit"))
             mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(animalLocation, 18.0))

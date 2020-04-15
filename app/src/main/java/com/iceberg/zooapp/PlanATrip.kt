@@ -1,5 +1,6 @@
 package com.iceberg.zooapp
 
+import android.app.Activity
 import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
@@ -16,6 +17,7 @@ import androidx.biometric.BiometricPrompt
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_plan_a_trip.*
+import java.lang.ref.WeakReference
 
 class PlanATrip : AppCompatActivity() {
 
@@ -80,34 +82,20 @@ class PlanATrip : AppCompatActivity() {
 
     private fun authenticatePIN () {
         val km: KeyguardManager = this.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
-        if (Build.VERSION.SDK_INT >= 21 && km.isKeyguardSecure) {
+        if (Build.VERSION.SDK_INT >= 23 && km.isDeviceSecure) {
             val authIntent: Intent = km.createConfirmDeviceCredentialIntent("Just making sure it's you", "Enter device PIN to make a purchase")
             startActivityForResult(authIntent, REQUEST_CODE)
         } else {
-            if (BiometricManager.from(this).canAuthenticate() == BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED) {
-                //Device has biometric capabilities; suggest user to user to user a PIN or biometric unlock
-                Toast.makeText(
-                    this,
-                    "Please consider setting up a device PIN or Biometric option for a more secure purchasing experience.",
-                    Toast.LENGTH_LONG)
-                    .show()
-                loadWebPage()
-            } else {
-                //Device has no Biometric hardware
-                Toast.makeText(
-                    this,
-                    "Please consider setting up a device PIN for a more secure purchasing experience.",
-                    Toast.LENGTH_LONG)
-                    .show()
-                loadWebPage()
-            }
+            //Device has biometric capabilities; suggest user to user to user a PIN or biometric unlock
+            Toast.makeText(this, "Please consider setting up a device PIN or Biometric option for a more secure purchasing experience.", Toast.LENGTH_LONG).show()
+            loadWebPage()
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            REQUEST_CODE -> {
+        when (resultCode) {
+            Activity.RESULT_OK -> {
                 Log.d(PIN_TAG, "PIN authentication succeeded")
                 loadWebPage()
             } else -> {
