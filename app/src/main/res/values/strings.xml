@@ -3,6 +3,7 @@
 
 
     <!-- Animal Descriptions -->
+    <string name="african_painted_dog_des">African painted dogs are an intelligent and social carnivore living in packs of 6–20 individuals. Although led by a breeding pair like wolves, the pack’s structure is defined through posturing and complex submission ceremonies instead of aggression. The old, injured, and pups are cared for by the entire pack, and the youngest always eats first.</string>
     <string name="california_sea_lion_des">California Sea Lions are mammals. They must breathe at the surface and hold their breath while underwater.</string>
     <string name="american_alligator_des">American alligators are predators with many special adaptations for hunting in dark waters.</string>
     <string name="aldabra_tortoise_des">Aldabra tortoises are specially adapted for island life.</string>

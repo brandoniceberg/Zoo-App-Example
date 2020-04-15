@@ -20,6 +20,18 @@ class MainActivityRepo {
 
     private fun setAnimals() {
         dataset.add(Animal(
+            "African Painted Dog",
+            R.string.african_painted_dog_des,
+            "https://tulsazoo.org/wp-content/uploads/2020/04/African-Painted-Dog-Thumbnail-2.jpg",
+            R.drawable.meat_icon,
+            "Savannahs, woodlands and grasslands",
+            null,
+            null,
+            R.drawable.chimpanzee_status,
+            "Lycaon pictus"
+        ))
+
+        dataset.add(Animal(
             "African Lion",
             R.string.african_lion_des,
             "https://tulsazoo.org/wp-content/uploads/2015/08/African-Lion-Thumbnail.png",
