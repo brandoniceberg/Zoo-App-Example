@@ -1,6 +1,7 @@
 package com.iceberg.zooapp.adpaters
 
 import android.app.Activity
+import android.util.Pair as UtilPair
 import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Build
@@ -54,7 +55,11 @@ class MapAdapter(private val listOfAnimals: ArrayList<Animal>, private val activ
             intent.putExtra("bioname", animal.bioname)
 
             if (Build.VERSION.SDK_INT >= 21) {
-                val options = ActivityOptions.makeSceneTransitionAnimation(activity.get(), holder.animalImage, "animalImage")
+                val options = ActivityOptions.makeSceneTransitionAnimation(activity.get(),
+                    UtilPair.create(holder.animalImage, "animalImage"),
+                    UtilPair.create(holder.animalName, "animalName"),
+                    UtilPair.create(holder.bioName, "bioname"),
+                    UtilPair.create(holder.animalCard, "animalCard"))
 
                     holder.animalCard.context.startActivity(intent, options.toBundle())
             }else {

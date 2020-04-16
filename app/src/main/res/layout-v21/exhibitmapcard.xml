@@ -9,7 +9,7 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/animal_card"
-        android:transitionName="infoHolder"
+        android:transitionName="animalCard"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

@@ -20,7 +20,7 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/informationCard"
-        android:transitionName="infoHolder"
+        android:transitionName="animalCard"
         app:cardCornerRadius="5pt"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

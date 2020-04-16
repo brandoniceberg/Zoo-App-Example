@@ -32,7 +32,7 @@ class mapActivity: AppCompatActivity(), OnMapReadyCallback{
     var animalName: String? = null
     var animalImage: String? = null
     var animalHabitat: String? = null
-    var animalDescription: String? = null
+    var animalDescription: Int? = null
     var animalLongitude: Double? = null
     var animalLatitude: Double? = null
     var animalCoordiates: LatLng? = null
@@ -44,10 +44,15 @@ class mapActivity: AppCompatActivity(), OnMapReadyCallback{
         Mapbox.getInstance(this, getString(R.string.access_token))
         setContentView(R.layout.activity_map)
 
+        val cardView = informationCard
+        val map = map
+        cardView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+        map.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+
         //import extras from previous activity
         val bundle: Bundle = intent.extras!!
         animalName = bundle.getString("name")
-        animalDescription = bundle.getString("description")
+        animalDescription = bundle.getInt("description")
         animalImage = bundle.getString("image")
         animalHabitat = bundle.getString("habitat")
         animalStatus = bundle.getInt("status")
@@ -60,7 +65,7 @@ class mapActivity: AppCompatActivity(), OnMapReadyCallback{
         //Fill views with information
         Glide.with(this).load(animalImage).into(animalImageView)
         animalNameTextView.text = animalName
-        descriptionTextView.text = animalDescription
+        descriptionTextView.text = getString(animalDescription!!)
         habitatTextView.text = "Native Habitat: $animalHabitat"
         bionameTextView.text = animalBioName
         foodImageView.setImageResource(animalFood)
@@ -69,13 +74,6 @@ class mapActivity: AppCompatActivity(), OnMapReadyCallback{
         supportActionBar!!.setHomeAsUpIndicator(R.drawable.white_back_arrow)
         supportActionBar!!.title = animalName
         supportActionBar!!.setHomeButtonEnabled(true)
-
-        if (Build.VERSION.SDK_INT >= 16){
-            val cardView = informationCard
-            val map = map
-            cardView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-            map.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-        }
 
         mapView = map
         mapView.onCreate(savedInstanceState)

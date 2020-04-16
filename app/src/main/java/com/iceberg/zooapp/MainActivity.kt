@@ -5,7 +5,10 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.iceberg.zooapp.adpaters.AnimalListAdapter
 import com.iceberg.zooapp.models.Animal
 import com.iceberg.zooapp.repositories.MainActivityRepo
@@ -31,17 +34,15 @@ class MainActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayShowHomeEnabled(true)
         supportActionBar!!.title = "Animals"
 
-        if (Build.VERSION.SDK_INT >= 16) {
-            val view = animalListView
-            view.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-        }
+        val view = animalListView
+        view.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 
         initRecyclerView()
 
     }
 
     private fun initRecyclerView(){
-        animalListView.layoutManager = LinearLayoutManager(this)
+        animalListView.layoutManager = StaggeredGridLayoutManager(3, RecyclerView.VERTICAL)
         animalListView.adapter = AnimalListAdapter(model.getAnimals().value!!, WeakReference(this))
     }
 

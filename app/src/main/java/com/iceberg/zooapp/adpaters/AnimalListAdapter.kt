@@ -1,6 +1,7 @@
 package com.iceberg.zooapp.adpaters
 
 import android.app.Activity
+import android.util.Pair as UtilPair
 import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Build
@@ -20,14 +21,13 @@ import java.lang.ref.WeakReference
 class AnimalListAdapter(private val listOfAnimals: ArrayList<Animal>, private val activity: WeakReference<Activity>): RecyclerView.Adapter<AnimalListAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        val animalName: TextView = itemView.findViewById(R.id.nameTextView)
+        val animalName: TextView = itemView.findViewById(R.id.animalNameTextView)
         val animalImage: ImageView = itemView.findViewById(R.id.animalImageView)
-        val animalDescription: TextView = itemView.findViewById(R.id.descriptionTextView)
         val animalCard: CardView = itemView.findViewById(R.id.animal_card)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.animal_card, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.animal_grid_card, parent, false)
         return ViewHolder(view)
     }
 
@@ -38,7 +38,6 @@ class AnimalListAdapter(private val listOfAnimals: ArrayList<Animal>, private va
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val animal: Animal = listOfAnimals[position]
         holder.animalName.text = animal.name
-        holder.animalDescription.text = animal.bioname
         Glide.with(holder.animalImage.context).load(animal.image).into(holder.animalImage)
         holder.animalCard.setOnClickListener {
             val intent = Intent(holder.animalCard.context, mapActivity::class.java)
@@ -53,7 +52,10 @@ class AnimalListAdapter(private val listOfAnimals: ArrayList<Animal>, private va
             intent.putExtra("status", animal.status)
             intent.putExtra("bioname", animal.bioname)
             if (Build.VERSION.SDK_INT >= 21) {
-                val options = ActivityOptions.makeSceneTransitionAnimation(activity.get(), holder.animalImage, "animalImage")
+                val options = ActivityOptions.makeSceneTransitionAnimation(activity.get(),
+                    UtilPair.create(holder.animalImage, "animalImage"),
+                    UtilPair.create(holder.animalName, "animalName"),
+                    UtilPair.create(holder.animalCard, "animalCard"))
                 holder.animalCard.context.startActivity(intent, options.toBundle())
             }else {
                 holder.animalCard.context.startActivity(intent)
