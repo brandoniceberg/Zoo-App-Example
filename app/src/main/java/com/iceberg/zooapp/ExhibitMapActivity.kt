@@ -1,11 +1,14 @@
 package com.iceberg.zooapp
 
+import android.app.Activity
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.iceberg.zooapp.adpaters.MapAdapter
 import com.iceberg.zooapp.models.Animal
 import com.iceberg.zooapp.viewModels.ExhibitMapViewModel
+import com.mapbox.android.core.permissions.PermissionsListener
+import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
@@ -25,14 +30,16 @@ import kotlinx.android.synthetic.main.activity_exhibit_map.*
 import kotlinx.android.synthetic.main.activity_exhibit_map.map
 import kotlinx.coroutines.*
 import java.lang.ref.WeakReference
+import java.security.Permissions
 
-class ExhibitMapActivity : AppCompatActivity(), OnMapReadyCallback {
+class ExhibitMapActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsListener {
 
     private val TAG = "ExhibitMapActivity"
 
     private lateinit var mapView: MapView
     private val REQUEST_CODE: Int = 5694
     private var exhibitName: String? = null
+    private lateinit var permissionsManager: PermissionsManager
     private val model = ExhibitMapViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,8 +66,6 @@ class ExhibitMapActivity : AppCompatActivity(), OnMapReadyCallback {
         map.getMapAsync(this)
 
         initRecyclerView()
-
-        checkPermissions()
     }
 
     private fun initRecyclerView(){
@@ -70,31 +75,7 @@ class ExhibitMapActivity : AppCompatActivity(), OnMapReadyCallback {
         val snapHelper = PagerSnapHelper()
         snapHelper.attachToRecyclerView(mapRecyclerView)
 
-
         mapRecyclerView.overlay
-    }
-
-    private fun checkPermissions(){
-        if (Build.VERSION.SDK_INT >= 23){
-            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-                requestPermissions(arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE)
-            }
-        }
-        return
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        when (requestCode) {
-            REQUEST_CODE -> {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    Log.d("LOCATION ACCESS", "Location access granted.")
-                } else {
-                    Log.d("LOCATION ACCESS", "Location access was denied.")
-                }
-            }
-        }
     }
 
     override fun onMapReady(mapboxMap: MapboxMap) {
@@ -113,10 +94,31 @@ class ExhibitMapActivity : AppCompatActivity(), OnMapReadyCallback {
             val animalName = animal.name
             val animalLocation = com.mapbox.mapboxsdk.geometry.LatLng(animalLatitude!!, animalLongitude!!)
             mapboxMap.addMarker(MarkerOptions().position(animalLocation).title("$animalName Exhibit"))
-            mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(animalLocation, 18.0))
+
         }
+    }
 
+    private fun enableLocation() {
+        if (PermissionsManager.areLocationPermissionsGranted(this)){
+            //Do stuff
+        }else {
+            permissionsManager = PermissionsManager(this)
+            permissionsManager.requestLocationPermissions(this)
+        }
+    }
 
+    override fun onExplanationNeeded(permissionsToExplain: MutableList<String>?) {
+        Toast.makeText(this, "Some features may not be available with location turned off", Toast.LENGTH_LONG).show()
+    }
+
+    override fun onPermissionResult(granted: Boolean) {
+        if (granted) {
+            enableLocation()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     override fun onStart() {
