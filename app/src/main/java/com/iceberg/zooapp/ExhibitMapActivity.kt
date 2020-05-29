@@ -1,5 +1,6 @@
 package com.iceberg.zooapp
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
@@ -60,12 +61,22 @@ class ExhibitMapActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsL
 
         map.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 
+        enableLocation()
 
         mapView = map
         map.onCreate(savedInstanceState)
         map.getMapAsync(this)
 
         initRecyclerView()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId){
+            android.R.id.home -> {
+                onBackPressed()
+            }
+        }
+        return true
     }
 
     private fun initRecyclerView(){
@@ -97,10 +108,11 @@ class ExhibitMapActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsL
 
         }
     }
-
+    @SuppressLint("LogNotTimber")
     private fun enableLocation() {
         if (PermissionsManager.areLocationPermissionsGranted(this)){
             //Do stuff
+            Log.d(TAG, "Location permission granted")
         }else {
             permissionsManager = PermissionsManager(this)
             permissionsManager.requestLocationPermissions(this)

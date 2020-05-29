@@ -11,11 +11,12 @@ class ExhibitListViewModel: ViewModel() {
     private var exhibits: MutableLiveData<ArrayList<Exhibits>> = MutableLiveData()
     private val repo = ExhibitListRepo()
 
-    fun init() {
+    private fun grabExhibits() {
         exhibits = repo.getExhibits()
     }
 
     fun getExhibits(): LiveData<ArrayList<Exhibits>>{
+        grabExhibits()
         return exhibits
     }
 

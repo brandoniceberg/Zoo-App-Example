@@ -1,9 +1,14 @@
 package com.iceberg.zooapp
 
 import android.annotation.SuppressLint
+import android.graphics.Color
+import com.mapbox.core.constants.Constants.PRECISION_6
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineColor
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -11,17 +16,26 @@ import com.bumptech.glide.Glide
 import com.mapbox.android.core.location.*
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
+import com.mapbox.api.directions.v5.DirectionsCriteria
+import com.mapbox.api.directions.v5.MapboxDirections
 import com.mapbox.api.directions.v5.models.DirectionsResponse
+import com.mapbox.api.directions.v5.models.DirectionsRoute
+import com.mapbox.geojson.Feature
+import com.mapbox.geojson.FeatureCollection
+import com.mapbox.geojson.LineString
 import com.mapbox.geojson.Point
 import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.annotations.MarkerOptions
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.geometry.LatLng
+import com.mapbox.mapboxsdk.geometry.LatLngBounds
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions
 import com.mapbox.mapboxsdk.maps.MapView
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import com.mapbox.mapboxsdk.maps.Style
-import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute
+import com.mapbox.mapboxsdk.style.layers.LineLayer
+import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
 import kotlinx.android.synthetic.main.activity_map.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -46,6 +60,8 @@ class mapActivity: AppCompatActivity(), OnMapReadyCallback, PermissionsListener,
     private var animalBioName: String? = null
 
     private lateinit var permissionsManager: PermissionsManager
+
+    private lateinit var directionsFeatureCollection: FeatureCollection
 
     private lateinit var mapboxMap: MapboxMap
     private var locationEngine: LocationEngine? = null
@@ -92,6 +108,16 @@ class mapActivity: AppCompatActivity(), OnMapReadyCallback, PermissionsListener,
         supportActionBar!!.setHomeButtonEnabled(true)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId){
+            android.R.id.home -> {
+                onBackPressed()
+            }
+        }
+        return true
+    }
+
+    @SuppressLint("MissingPermission")
     override fun onMapReady(mapboxMap: MapboxMap) {
         this.mapboxMap = mapboxMap
 
@@ -105,6 +131,10 @@ class mapActivity: AppCompatActivity(), OnMapReadyCallback, PermissionsListener,
             locationComponent.activateLocationComponent(locationComponentActivationOptions)
 
             locationComponent.isLocationComponentEnabled = true
+
+            initDottedLineSourceAndLayer(it)
+
+            mapBounds()
         }
         //Define map settings
         mapboxMap.uiSettings.isCompassEnabled = false
@@ -119,37 +149,77 @@ class mapActivity: AppCompatActivity(), OnMapReadyCallback, PermissionsListener,
 
         mapboxMap.addMarker(MarkerOptions().position(LatLng(animalLatitude!!, animalLongitude!!)).title("$animalName Exhibit"))
 
-        NavigationRoute.builder(this)
-            .accessToken(getString(R.string.access_token))
+        val client = MapboxDirections.builder()
             .origin(originLocation)
             .destination(desitination)
+            .overview(DirectionsCriteria.OVERVIEW_FULL)
+            .profile(DirectionsCriteria.PROFILE_WALKING)
+            .accessToken(getString(R.string.access_token))
             .build()
-            .getRoute(object :  Callback<DirectionsResponse> {
+
+        client.enqueueCall(object : Callback<DirectionsResponse> {
+            override fun onFailure(call: Call<DirectionsResponse>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onResponse(
+                call: Call<DirectionsResponse>,
+                response: Response<DirectionsResponse>
+            ) {
                 @SuppressLint("LogNotTimber")
-                override fun onFailure(call: Call<DirectionsResponse>, t: Throwable) {
-                    Log.d(TAG, "Error: " + t.message)
-                    if (!t.message.equals("Coordinate is invalid: 0,0")){
-                        Toast.makeText(applicationContext, "Error:  ${t.message}", Toast.LENGTH_SHORT).show()
-                    }
+                if (response.body() == null) {
+                    Log.d(TAG, "No routes found, make sure you set the right user and access token.")
+                    return
+                } else if (response.body()!!.routes().size < 1) {
+                    Log.d(TAG, "No routes found")
+                    return
                 }
-                @SuppressLint("LogNotTimber")
-                override fun onResponse(
-                    call: Call<DirectionsResponse>,
-                    response: Response<DirectionsResponse>
-                ) {
-                    if (response.body() == null) {
-                        Log.d(TAG,"No routes found, make sure you set the right user and access token.");
-                        return
-                    } else if (response.body()!!.routes().size < 1) {
-                        Toast.makeText(applicationContext, "No routes found", Toast.LENGTH_LONG).show()
-                        Log.d(TAG,"No routes found")
-                        return
-                    }
+                drawNavigationPolylineRoute(response.body()!!.routes()[0])
+            }
 
-                }
+        })
 
-            })
+    }
 
+    private fun mapBounds() {
+        val desLatLng = LatLng(desitination.latitude(), desitination.longitude())
+        val originLatLng = LatLng(originLocation.latitude(), originLocation.longitude())
+        val latLngBounds = LatLngBounds.Builder()
+            .include(originLatLng)
+            .include(desLatLng)
+            .build()
+
+        mapboxMap.easeCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 100), 5000)
+    }
+
+    private fun initDottedLineSourceAndLayer(loadedMapStyle: Style) {
+        directionsFeatureCollection = FeatureCollection.fromFeatures(ArrayList<Feature>())
+
+        loadedMapStyle.addSource(GeoJsonSource("SOURCE_ID", directionsFeatureCollection))
+
+        loadedMapStyle.addLayer(
+            LineLayer("DIRECTIONS_LAYER_ID", "SOURCE_ID").withProperties(
+                lineWidth(4.5f),
+                lineColor(Color.BLUE)
+            )
+        )
+    }
+
+    private fun drawNavigationPolylineRoute(route: DirectionsRoute) {
+        mapboxMap.getStyle {
+            val directionsRouteFeatureList: ArrayList<Feature> = arrayListOf()
+            val lineString: LineString = LineString.fromPolyline(route.geometry()!!, PRECISION_6)
+            val coordinates: List<Point> = lineString.coordinates()
+
+            for (i in coordinates.indices){
+                directionsRouteFeatureList.add(Feature.fromGeometry(LineString.fromLngLats(coordinates)))
+            }
+
+            directionsFeatureCollection = FeatureCollection.fromFeatures(directionsRouteFeatureList)
+            val source: GeoJsonSource = GeoJsonSource("SOURCE_ID")
+            source.setGeoJson(directionsFeatureCollection)
+
+        }
     }
 
     private fun enableLocation() {
@@ -163,6 +233,7 @@ class mapActivity: AppCompatActivity(), OnMapReadyCallback, PermissionsListener,
         }
     }
 
+    @SuppressLint("MissingPermission")
     private fun initLocationEngine() {
         locationEngine = LocationEngineProvider.getBestLocationEngine(this)
         locationEngine?.getLastLocation(this)

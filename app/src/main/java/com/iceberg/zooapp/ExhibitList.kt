@@ -25,8 +25,6 @@ class ExhibitList : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_exhibit_list)
 
-        model.init()
-
         val actionBar: ActionBar = supportActionBar!!
         actionBar.setDisplayShowHomeEnabled(true)
         actionBar.setIcon(R.drawable.tzoo_logo)
@@ -60,7 +58,10 @@ class ExhibitList : AppCompatActivity() {
                 val intent = Intent(this, PlanATrip::class.java)
                 startActivity(intent)
             }
+            android.R.id.home -> {
+                onBackPressed()
+            }
         }
-        return super.onOptionsItemSelected(item)
+        return true
     }
 }
