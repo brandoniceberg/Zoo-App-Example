@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.iceberg.zooapp.ExhibitMapActivity
@@ -16,7 +17,7 @@ class ExhibitRecyclerViewAdapter(private val listOfExhibits: ArrayList<Exhibits>
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val image: ImageView = itemView.findViewById(R.id.exhibitImageView)
-        val parentLayout: LinearLayout = itemView.findViewById(R.id.exhibitListParentLayout)
+        val cardView: CardView = itemView.findViewById(R.id.cardView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -31,10 +32,10 @@ class ExhibitRecyclerViewAdapter(private val listOfExhibits: ArrayList<Exhibits>
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val exhibit = listOfExhibits[position]
         Glide.with(holder.image.context).load(exhibit.img).into(holder.image)
-        holder.parentLayout.setOnClickListener {
-            val intent = Intent(holder.parentLayout.context, ExhibitMapActivity::class.java)
+        holder.cardView.setOnClickListener {
+            val intent = Intent(holder.cardView.context, ExhibitMapActivity::class.java)
             intent.putExtra("exhibit", exhibit.name)
-            holder.parentLayout.context.startActivity(intent)
+            holder.cardView.context.startActivity(intent)
         }
     }
 }

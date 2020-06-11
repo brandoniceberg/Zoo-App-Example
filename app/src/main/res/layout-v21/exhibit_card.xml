@@ -9,9 +9,10 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:layout_height="105pt"
         android:layout_margin="5pt"
-        android:focusable="true"
         app:cardCornerRadius="5pt"
         app:cardElevation="2pt">
 
