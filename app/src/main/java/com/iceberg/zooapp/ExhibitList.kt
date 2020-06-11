@@ -29,10 +29,8 @@ class ExhibitList : AppCompatActivity() {
         actionBar.setDisplayShowHomeEnabled(true)
         actionBar.setIcon(R.drawable.tzoo_logo)
 
-        if (Build.VERSION.SDK_INT >= 16){
-            val view = exhibitListView
-            view.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-        }
+        val view = exhibitListView
+        view.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 
         initRecyclerView()
     }
