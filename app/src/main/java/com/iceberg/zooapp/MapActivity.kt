@@ -43,7 +43,7 @@ import retrofit2.Response
 import java.lang.Exception
 
 
-class mapActivity: AppCompatActivity(), OnMapReadyCallback, PermissionsListener, LocationEngineCallback<LocationEngineResult>{
+class MapActivity: AppCompatActivity(), OnMapReadyCallback, PermissionsListener, LocationEngineCallback<LocationEngineResult>{
 
     private val TAG = "mapActivity"
 

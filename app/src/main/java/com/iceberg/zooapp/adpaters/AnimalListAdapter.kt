@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.iceberg.zooapp.R
 import com.iceberg.zooapp.models.Animal
-import com.iceberg.zooapp.mapActivity
+import com.iceberg.zooapp.MapActivity
 import java.lang.ref.WeakReference
 
 class AnimalListAdapter(private val listOfAnimals: ArrayList<Animal>, private val activity: WeakReference<Activity>): RecyclerView.Adapter<AnimalListAdapter.ViewHolder>() {
@@ -40,7 +40,7 @@ class AnimalListAdapter(private val listOfAnimals: ArrayList<Animal>, private va
         holder.animalName.text = animal.name
         Glide.with(holder.animalImage.context).load(animal.image).into(holder.animalImage)
         holder.animalCard.setOnClickListener {
-            val intent = Intent(holder.animalCard.context, mapActivity::class.java)
+            val intent = Intent(holder.animalCard.context, MapActivity::class.java)
 
             intent.putExtra("name", animal.name)
             intent.putExtra("description", animal.description)

@@ -52,7 +52,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".mapActivity"
+            android:name=".MapActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MapTheme">
             <meta-data
