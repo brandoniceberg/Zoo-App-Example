@@ -1,7 +1,9 @@
 package com.iceberg.zooapp
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Color
+import android.location.LocationManager
 import com.mapbox.core.constants.Constants.PRECISION_6
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineColor
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth
@@ -42,10 +44,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.lang.Exception
 
+private const val TAG = "MapActivity"
 
 class MapActivity: AppCompatActivity(), OnMapReadyCallback, PermissionsListener, LocationEngineCallback<LocationEngineResult>{
-
-    private val TAG = "mapActivity"
 
     private lateinit var mapView: MapView
 
@@ -123,18 +124,19 @@ class MapActivity: AppCompatActivity(), OnMapReadyCallback, PermissionsListener,
 
         enableLocation()
 
-        mapboxMap.setStyle(Style.Builder().fromUri("mapbox://styles/brandoniceberg/ck72sen6g1mju1itez0o48916")){
-            val locationComponentActivationOptions = LocationComponentActivationOptions.builder(this, it).build()
+        mapboxMap.setStyle(Style.Builder().fromUri("mapbox://styles/brandoniceberg/ck72sen6g1mju1itez0o48916")){style ->
 
-            val locationComponent = mapboxMap.locationComponent
+            PermissionsManager.areLocationPermissionsGranted(this).let {
+                val locationComponentActivationOptions = LocationComponentActivationOptions.builder(this, style).build()
 
-            locationComponent.activateLocationComponent(locationComponentActivationOptions)
+                val locationComponent = mapboxMap.locationComponent
 
-            locationComponent.isLocationComponentEnabled = true
+                locationComponent.activateLocationComponent(locationComponentActivationOptions)
 
-            initDottedLineSourceAndLayer(it)
+                locationComponent.isLocationComponentEnabled = true
 
-            mapBounds()
+                mapBounds()
+            }
         }
         //Define map settings
         mapboxMap.uiSettings.isCompassEnabled = false
@@ -149,36 +151,6 @@ class MapActivity: AppCompatActivity(), OnMapReadyCallback, PermissionsListener,
 
         mapboxMap.addMarker(MarkerOptions().position(LatLng(animalLatitude!!, animalLongitude!!)).title("$animalName Exhibit"))
 
-        val client = MapboxDirections.builder()
-            .origin(originLocation)
-            .destination(desitination)
-            .overview(DirectionsCriteria.OVERVIEW_FULL)
-            .profile(DirectionsCriteria.PROFILE_WALKING)
-            .accessToken(getString(R.string.access_token))
-            .build()
-
-        client.enqueueCall(object : Callback<DirectionsResponse> {
-            override fun onFailure(call: Call<DirectionsResponse>, t: Throwable) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onResponse(
-                call: Call<DirectionsResponse>,
-                response: Response<DirectionsResponse>
-            ) {
-                @SuppressLint("LogNotTimber")
-                if (response.body() == null) {
-                    Log.d(TAG, "No routes found, make sure you set the right user and access token.")
-                    return
-                } else if (response.body()!!.routes().size < 1) {
-                    Log.d(TAG, "No routes found")
-                    return
-                }
-                drawNavigationPolylineRoute(response.body()!!.routes()[0])
-            }
-
-        })
-
     }
 
     private fun mapBounds() {
@@ -190,19 +162,6 @@ class MapActivity: AppCompatActivity(), OnMapReadyCallback, PermissionsListener,
             .build()
 
         mapboxMap.easeCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 100), 5000)
-    }
-
-    private fun initDottedLineSourceAndLayer(loadedMapStyle: Style) {
-        directionsFeatureCollection = FeatureCollection.fromFeatures(ArrayList<Feature>())
-
-        loadedMapStyle.addSource(GeoJsonSource("SOURCE_ID", directionsFeatureCollection))
-
-        loadedMapStyle.addLayer(
-            LineLayer("DIRECTIONS_LAYER_ID", "SOURCE_ID").withProperties(
-                lineWidth(4.5f),
-                lineColor(Color.BLUE)
-            )
-        )
     }
 
     private fun drawNavigationPolylineRoute(route: DirectionsRoute) {
