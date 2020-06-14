@@ -1,14 +1,13 @@
 package com.iceberg.zooapp
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.location.LocationManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -29,8 +28,10 @@ import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import com.mapbox.mapboxsdk.maps.Style
 import kotlinx.android.synthetic.main.activity_exhibit_map.*
-import kotlinx.android.synthetic.main.activity_exhibit_map.map
-import java.lang.Exception
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import java.lang.ref.WeakReference
 
 private const val TAG = "ExhibitMapActivity"
@@ -48,6 +49,8 @@ class ExhibitMapActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsL
         super.onCreate(savedInstanceState)
         Mapbox.getInstance(this, getString(R.string.access_token))
         setContentView(R.layout.activity_exhibit_map)
+
+        checkPermissionStatus()
 
         //Get information from previous activity
         val bundle: Bundle = intent.extras!!
@@ -90,7 +93,6 @@ class ExhibitMapActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsL
 
     @SuppressLint("MissingPermission")
     override fun onMapReady(mapboxMap: MapboxMap) {
-        checkPermissionStatus()
 
         mapboxMap.setStyle(Style.Builder().fromUri("mapbox://styles/brandoniceberg/ck72sen6g1mju1itez0o48916")){style ->
 
@@ -125,10 +127,9 @@ class ExhibitMapActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsL
     }
     @SuppressLint("LogNotTimber")
     private fun checkPermissionStatus() {
-        if (PermissionsManager.areLocationPermissionsGranted(this)){
-            //Do stuff
+        if (PermissionsManager.areLocationPermissionsGranted(this)) {
             initLocationEngine()
-        }else {
+        } else {
             permissionsManager = PermissionsManager(this)
             permissionsManager.requestLocationPermissions(this)
         }
