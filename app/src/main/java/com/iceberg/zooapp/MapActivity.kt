@@ -161,7 +161,7 @@ class MapActivity: AppCompatActivity(), OnMapReadyCallback, PermissionsListener,
             .include(desLatLng)
             .build()
 
-        mapboxMap.easeCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 100), 5000)
+        mapboxMap.easeCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 200), 2500)
     }
 
     private fun drawNavigationPolylineRoute(route: DirectionsRoute) {

@@ -58,15 +58,6 @@
                     android:textStyle="italic"
                     android:layout_marginLeft="5pt" />
 
-                    <ImageView
-                        android:id="@+id/favorite_icon"
-                        android:layout_marginTop="5pt"
-                        android:layout_marginStart="5pt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/favorite_icon_off"
-                        android:layout_marginLeft="5pt" />
-
                 </LinearLayout>
 
             </LinearLayout>
