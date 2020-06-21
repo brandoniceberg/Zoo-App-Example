@@ -1,21 +1,14 @@
 package com.iceberg.zooapp
 
 import android.content.Intent
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.ActionBar
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.iceberg.zooapp.adpaters.ExhibitRecyclerViewAdapter
-import com.iceberg.zooapp.models.Exhibits
 import com.iceberg.zooapp.viewModels.ExhibitListViewModel
 import kotlinx.android.synthetic.main.activity_exhibit_list.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ExhibitList : AppCompatActivity() {
 
@@ -49,7 +42,7 @@ class ExhibitList : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId){
             R.id.animal_item -> {
-                val intent = Intent(this, MainActivity::class.java)
+                val intent = Intent(this, AnimalsActivity::class.java)
                 startActivity(intent)
             }
             R.id.visit_item -> {

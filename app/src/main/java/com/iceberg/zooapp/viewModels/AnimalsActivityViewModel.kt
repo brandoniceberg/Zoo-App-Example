@@ -4,12 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.iceberg.zooapp.models.Animal
-import com.iceberg.zooapp.repositories.MainActivityRepo
+import com.iceberg.zooapp.repositories.AnimalsActivityRepo
 
-class MainActivityViewModel : ViewModel() {
+class AnimalsActivityViewModel : ViewModel() {
 
     private var animals: MutableLiveData<ArrayList<Animal>> = MutableLiveData()
-    private val repo = MainActivityRepo()
+    private val repo = AnimalsActivityRepo()
 
     fun init(){
         animals = repo.getAnimals()

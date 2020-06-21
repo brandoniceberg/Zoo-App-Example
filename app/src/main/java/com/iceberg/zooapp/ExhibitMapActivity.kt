@@ -8,9 +8,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.PagerSnapHelper
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import com.iceberg.zooapp.adpaters.MapAdapter
 import com.iceberg.zooapp.viewModels.ExhibitMapViewModel
 import com.mapbox.android.core.location.LocationEngine
@@ -82,7 +80,8 @@ class ExhibitMapActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsL
     }
 
     private fun initRecyclerView(){
-        mapRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+        val layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+        mapRecyclerView.layoutManager = layoutManager
         mapRecyclerView.adapter = MapAdapter(model.getAnimals().value!!, WeakReference(this))
 
         val snapHelper = PagerSnapHelper()
@@ -91,9 +90,14 @@ class ExhibitMapActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsL
         mapRecyclerView.overlay
     }
 
+    private fun LinearSnapHelper.getSnapPosition(recyclerView: RecyclerView): Int {
+        val layoutManager = recyclerView.layoutManager ?: return RecyclerView.NO_POSITION
+        val snapView = findSnapView(layoutManager) ?: return RecyclerView.NO_POSITION
+        return layoutManager.getPosition(snapView)
+    }
+
     @SuppressLint("MissingPermission")
     override fun onMapReady(mapboxMap: MapboxMap) {
-
         mapboxMap.setStyle(Style.Builder().fromUri("mapbox://styles/brandoniceberg/ck72sen6g1mju1itez0o48916")){style ->
 
             PermissionsManager.areLocationPermissionsGranted(this).let {

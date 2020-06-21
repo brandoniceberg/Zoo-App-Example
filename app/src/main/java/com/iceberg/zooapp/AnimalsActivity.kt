@@ -1,28 +1,19 @@
 package com.iceberg.zooapp
 
 
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.iceberg.zooapp.adpaters.AnimalListAdapter
-import com.iceberg.zooapp.models.Animal
-import com.iceberg.zooapp.repositories.MainActivityRepo
-import com.iceberg.zooapp.viewModels.MainActivityViewModel
+import com.iceberg.zooapp.viewModels.AnimalsActivityViewModel
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.lang.ref.WeakReference
 
-class MainActivity : AppCompatActivity() {
+class AnimalsActivity : AppCompatActivity() {
 
-    private val model = MainActivityViewModel()
+    private val model = AnimalsActivityViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

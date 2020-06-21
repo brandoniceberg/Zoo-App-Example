@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.iceberg.zooapp.R
 import com.iceberg.zooapp.models.Animal
 
-class MainActivityRepo {
+class AnimalsActivityRepo {
 
     private var dataset: ArrayList<Animal> = arrayListOf()
 
