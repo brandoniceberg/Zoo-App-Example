@@ -1,6 +1,5 @@
 ### Zoo-App-Example
-This project's note worthy implementations are Mapbox Maps SDK, BiometricPrompt API and shared element transitions.
-While it's not perfect I am learning more everyday and fixing my mistakes along the way.
+This project is a prototype idea on what a Tulsa Zoo producation app would look like. A lot of the main core concepts and ideas have been applied to this project like device compatabliity, security and ease-of use. This project now (as of Jun. 27 2020) uses Firebase Firestore to hold our data so that the application can be easily expanded to other systems (ie. iOS and web). MapBox was choosen as the map provider because of it's overall better performance compared to Google Maps when it comes to launch time and consistent frame rate. The application supports the latest biometric standards provided by Google (face unlock on Pixel 4 works perfectly fine here). Glide provides fast load times when it comes to displaying images from the database. Leak Canary was used to help track and eleminate memory leak issues. All these considerations were made to provide the absoulte best experience to every user.
 
 ## Libraries Used:
 - implementation 'androidx.biometric:biometric:1.0.1'
