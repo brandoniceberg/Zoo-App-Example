@@ -31,7 +31,7 @@ class ExhibitRecyclerViewAdapter(private val listOfExhibits: ArrayList<Exhibits>
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val exhibit = listOfExhibits[position]
-        Glide.with(holder.image.context).load(exhibit.img).into(holder.image)
+        holder.image.setImageResource(exhibit.img)
         holder.cardView.setOnClickListener {
             val intent = Intent(holder.cardView.context, ExhibitMapActivity::class.java)
             intent.putExtra("exhibit", exhibit.name)

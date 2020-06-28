@@ -13,9 +13,9 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.iceberg.zooapp.models.Animal
 import com.iceberg.zooapp.R
 import com.iceberg.zooapp.MapActivity
+import com.iceberg.zooapp.models.Animal
 import java.lang.ref.WeakReference
 
 class MapAdapter(private val listOfAnimals: ArrayList<Animal>, private val activity: WeakReference<Activity>): RecyclerView.Adapter<MapAdapter.ViewHolder>() {
@@ -38,21 +38,19 @@ class MapAdapter(private val listOfAnimals: ArrayList<Animal>, private val activ
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val animal: Animal = listOfAnimals[position]
-        Glide.with(holder.animalImage.context).load(animal.image).into(holder.animalImage)
+        Glide.with(holder.animalImage.context).load(animal.imgs[0]).into(holder.animalImage)
         holder.animalName.text = animal.name
         holder.bioName.text = animal.bioname
         holder.animalCard.setOnClickListener {
-            val intent = Intent(holder.animalCard.context, MapActivity::class.java)
-
-            intent.putExtra("name", animal.name)
-            intent.putExtra("description", animal.description)
-            intent.putExtra("image", animal.image)
-            intent.putExtra("habitat", animal.habitat)
-            intent.putExtra("food", animal.food)
-            intent.putExtra("latitude", animal.latitude)
-            intent.putExtra("longitude", animal.longitude)
-            intent.putExtra("status", animal.status)
-            intent.putExtra("bioname", animal.bioname)
+            val intent = Intent(holder.animalCard.context, MapActivity::class.java).apply {
+                this.putExtra("name", animal.name)
+                this.putExtra("bioname", animal.bioname)
+                this.putExtra("description", animal.description)
+                this.putExtra("habitat", animal.habitat)
+                this.putExtra("imgs", animal.imgs)
+                this.putExtra("latitude", animal.latitude)
+                this.putExtra("longitude", animal.longitude)
+            }
 
             if (Build.VERSION.SDK_INT >= 21) {
                 val options = ActivityOptions.makeSceneTransitionAnimation(activity.get(),

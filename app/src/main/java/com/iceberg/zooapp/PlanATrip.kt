@@ -2,21 +2,36 @@ package com.iceberg.zooapp
 
 import android.app.Activity
 import android.app.KeyguardManager
+import android.app.UiModeManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ConfigurationInfo
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.ClickableSpan
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.ActionMenuView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.Toolbar
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
+import androidx.core.os.ConfigurationCompat
+import com.mapbox.mapboxsdk.Mapbox
+import com.mapbox.mapboxsdk.annotations.MarkerOptions
+import com.mapbox.mapboxsdk.camera.CameraPosition
+import com.mapbox.mapboxsdk.geometry.LatLng
+import com.mapbox.mapboxsdk.maps.*
 import kotlinx.android.synthetic.main.activity_plan_a_trip.*
 import java.lang.ref.WeakReference
 
@@ -26,20 +41,58 @@ class PlanATrip : AppCompatActivity() {
     private val PIN_TAG = "PIN AUTH"
     private val url = "https://2584.blackbaudhosting.com/2584/tickets?tab=3&txobjid=b1bdb2ed-6323-4f50-98b9-0e4c0c67a6d3"
     private val REQUEST_CODE = 534
+    private lateinit var mapFragment: SupportMapFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_plan_a_trip)
 
-        val actionBar: ActionBar = supportActionBar!!
-        actionBar.title = getString(R.string.title_activity_plan_a_visit)
-        actionBar.setHomeAsUpIndicator(R.drawable.white_back_arrow)
-        actionBar.setDisplayShowHomeEnabled(true)
+        toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
 
-        if (Build.VERSION.SDK_INT >= 16){
-            val view = tzooImageView
-            view.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-            LinearLayout.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+        Mapbox.getInstance(this, getString(R.string.access_token))
+
+        val string = SpannableString(getString(R.string.additional_information)).apply {
+            this.setSpan(object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    startDialer()
+                }
+            }, 44, 58, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        addInfoTextView.text = string
+
+        //load Fragment
+        if (savedInstanceState == null) {
+
+            val options = MapboxMapOptions.createFromAttributes(this).apply {
+                camera(CameraPosition.Builder()
+                    .target(LatLng(36.2135022, -95.9047016))
+                    .zoom(15.60)
+                    .build())
+            }
+
+            mapFragment = SupportMapFragment.newInstance(options)
+
+            supportFragmentManager.beginTransaction().add(R.id.container, mapFragment, "com.Mapbox.map").commit()
+
+        }
+
+        mapFragment.getMapAsync { mapboxMap ->
+            mapboxMap.apply {
+                this.setStyle(Style.TRAFFIC_DAY)
+                this.gesturesManager.removeShoveGestureListener()
+                this.addOnMapClickListener {
+                    startNavigation()
+                    return@addOnMapClickListener true
+                }
+                this.addMarker(MarkerOptions().position(LatLng(36.2135022, -95.9047016))).title = "Tulsa Zoo Parking"
+                this.setOnMarkerClickListener {
+                    startNavigation()
+                    true
+                }
+            }
         }
 
         //When purchase button is clicked
@@ -81,13 +134,16 @@ class PlanATrip : AppCompatActivity() {
 
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId){
-            android.R.id.home ->{
-                onBackPressed()
-            }
-        }
-        return true
+    private fun startDialer() {
+        val callIntent = Intent(Intent.ACTION_DIAL)
+        callIntent.data = Uri.parse("tel:(918)669-6602")
+        startActivity(callIntent)
+    }
+
+    private fun startNavigation() {
+        val mapIntent = Intent(Intent.ACTION_VIEW)
+        mapIntent.data = Uri.parse("google.navigation:q=Tulsa Zoo Parking")
+        ContextCompat.startActivity(this, mapIntent, null)
     }
 
     private fun authenticatePIN () {

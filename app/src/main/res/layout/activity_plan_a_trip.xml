@@ -1,112 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/LinearLayout"
+    android:id="@+id/CoordinatorLayout"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".PlanATrip">
 
-    <ImageView
-        android:id="@+id/tzooImageView"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="175pt"
-        android:scaleType="centerCrop"
-        app:srcCompat="@drawable/tzoo_sign" />
+        android:fitsSystemWindows="true"
+        android:layout_height="350dp">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10pt"
-        android:layout_marginTop="5pt"
-        android:layout_marginBottom="5pt"
-        android:text="Buy Tickets:"
-        android:textSize="25sp"
-        app:fontFamily="@font/merriweather_bold"
-        android:layout_marginStart="10pt" />
+    <com.google.android.material.appbar.CollapsingToolbarLayout
+        android:id="@+id/collapsingToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        app:layout_scrollFlags="scroll|exitUntilCollapsed"
+        style="@style/Theme.AppCompat.Light.DarkActionBar"
+        app:title="Plan A Trip">
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10pt"
-        android:layout_marginTop="5pt"
-        android:text="$8.00"
-        android:textSize="18sp"
-        app:fontFamily="@font/merriweather_bold" />
+        <ImageView
+            android:id="@+id/tzooImageView"
+            android:fitsSystemWindows="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_collapseMode="parallax"
+            android:scaleType="centerCrop"
+            android:src="@drawable/tzoo_sign" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10pt"
-        android:text="Child (ages 3-11)"
-        android:textSize="12sp"
-        app:fontFamily="@font/merriweather_light"
-        android:layout_marginStart="10pt" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:fitsSystemWindows="true"
+            app:navigationIcon="@drawable/white_back_arrow"
+            android:background="@android:color/transparent"
+            app:layout_collapseMode="pin" />
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10pt"
-        android:layout_marginTop="5pt"
-        android:text="$12.00"
-        android:textSize="18sp"
-        app:fontFamily="@font/merriweather_bold"
-        android:layout_marginStart="10pt" />
+    </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10pt"
-        android:text="Adult (ages 12-64)"
-        android:textSize="12sp"
-        app:fontFamily="@font/merriweather_light"
-        android:layout_marginStart="10pt" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10pt"
-        android:layout_marginTop="5pt"
-        android:text="$10.00"
-        android:textSize="18sp"
-        app:fontFamily="@font/merriweather_bold"
-        android:layout_marginStart="10pt" />
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:padding="10dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10pt"
-        android:text="Senior (ages 65+)"
-        android:textSize="12sp"
-        app:fontFamily="@font/merriweather_light"
-        android:layout_marginStart="10pt" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/legalTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10pt"
-        android:layout_marginTop="5pt"
-        android:layout_marginRight="10pt"
-        android:text="@string/purchase_disclosure"
-        app:fontFamily="@font/merriweather_light" />
+            <androidx.cardview.widget.CardView
+                android:id="@+id/mapCardView"
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="15dp"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardCornerRadius="5dp">
 
-    <Button
-        android:id="@+id/purchaseButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Buy Tickets Online"
-        android:layout_marginLeft="10pt"
-        android:layout_marginTop="5pt"
-        android:layout_marginRight="10pt"
-        />
+                <FrameLayout
+                    android:id="@+id/container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center" />
 
-</LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/admissionsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:fontFamily="@font/merriweather_bold"
+                android:text="Admission Prices:"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/purchaseInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/merriweather_light"
+                android:lineHeight="35dp"
+                android:text="@string/pricing_info"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/exceptionsTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/merriweather_light"
+                android:text="@string/pricing_exceptions"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/paymentmethodTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/merriweather_light"
+                android:text="@string/payment_methods" />
+
+            <TextView
+                android:id="@+id/zooAvaliabilityTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/merriweather_light"
+                android:text="@string/zoo_availability" />
+
+            <TextView
+                android:id="@+id/addInfoTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:fontFamily="@font/merriweather_light"
+                android:linksClickable="true"
+                android:text="@string/additional_information" />
+
+            <Button
+                android:id="@+id/purchaseButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="Purchase Tickets" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

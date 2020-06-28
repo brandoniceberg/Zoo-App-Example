@@ -1,6 +1,7 @@
 package com.iceberg.zooapp.repositories
 
 import androidx.lifecycle.MutableLiveData
+import com.iceberg.zooapp.R
 import com.iceberg.zooapp.models.Exhibits
 
 class ExhibitListRepo {
@@ -9,64 +10,63 @@ class ExhibitListRepo {
 
 
     fun getExhibits(): MutableLiveData<ArrayList<Exhibits>>{
-        setExhibits()
 
         val data: MutableLiveData<ArrayList<Exhibits>> = MutableLiveData()
-        data.value = dataset
+        data.value = setExhibits()
 
         return data
     }
 
-    private fun setExhibits() {
+    private fun setExhibits(): ArrayList<Exhibits> {
         dataset.add(Exhibits(
-            "African Plains",
-            "https://tulsazoo.org/wp-content/uploads/2015/08/Africa_NickH_Header_Blur.jpg"
+            "Africa",
+            R.drawable.africa
         ))
 
         dataset.add(Exhibits(
             "Chimpanzee Connection",
-            "https://tulsazoo.org/wp-content/uploads/2015/08/Chimp1_TulsaZoo_Header.jpg"
+            R.drawable.chimpanzee_connection
         ))
 
         dataset.add(Exhibits(
             "Conservation Center",
-            "https://tulsazoo.org/wp-content/uploads/2015/08/ConservationCenter_NickW_Header.jpg"
+            R.drawable.conservation_center
         ))
 
         dataset.add(Exhibits(
-            "The Lost Kingdom",
-            "https://tulsazoo.org/wp-content/uploads/2015/08/LK_Slides-opening.jpg"
+            "Lost Kingdom",
+            R.drawable.the_lost_kingdom
         ))
 
         dataset.add(Exhibits(
             "Life in the Cold",
-            "https://tulsazoo.org/wp-content/uploads/2015/08/LifeInTheCold_NickW_Header.jpg"
+            R.drawable.life_in_the_cold
         ))
 
         dataset.add(Exhibits(
             "Life in the Desert",
-            "https://tulsazoo.org/wp-content/uploads/2015/08/Desert_Header.jpg"
+            R.drawable.life_in_the_desert
         ))
 
         dataset.add(Exhibits(
             "Life in the Forest",
-            "https://tulsazoo.org/wp-content/uploads/2015/08/Forest_NickH_Header.jpg"
+            R.drawable.life_in_the_forest
         ))
 
         dataset.add(Exhibits(
             "Life in the Water",
-            "https://tulsazoo.org/wp-content/uploads/2015/08/Water_TulsaZoo_Header.jpg"
+            R.drawable.life_in_the_water
         ))
 
         dataset.add(Exhibits(
-            "Oceans & Islands",
-            "https://tulsazoo.org/wp-content/uploads/2015/08/OceansAndIslands_TulsaZoo_Header.jpg"
+            "Oceans and Islands",
+            R.drawable.oceans_and_islands
         ))
 
         dataset.add(Exhibits(
             "The Rainforest",
-            "https://tulsazoo.org/wp-content/uploads/2015/08/Rainforest_TulsaZoo_Header.jpg"
+            R.drawable.the_rainforest
         ))
-
+        return dataset
     }
 }

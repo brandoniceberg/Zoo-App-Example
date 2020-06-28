@@ -8,16 +8,6 @@ import com.iceberg.zooapp.repositories.ExhibitListRepo
 
 class ExhibitListViewModel: ViewModel() {
 
-    private var exhibits: MutableLiveData<ArrayList<Exhibits>> = MutableLiveData()
-    private val repo = ExhibitListRepo()
-
-    private fun grabExhibits() {
-        exhibits = repo.getExhibits()
-    }
-
-    fun getExhibits(): LiveData<ArrayList<Exhibits>>{
-        grabExhibits()
-        return exhibits
-    }
+    val exhibits: LiveData<ArrayList<Exhibits>> = ExhibitListRepo().getExhibits()
 
 }

@@ -7,12 +7,13 @@ import android.view.*
 import androidx.appcompat.app.ActionBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.iceberg.zooapp.adpaters.ExhibitRecyclerViewAdapter
+import com.iceberg.zooapp.models.Exhibits
 import com.iceberg.zooapp.viewModels.ExhibitListViewModel
 import kotlinx.android.synthetic.main.activity_exhibit_list.*
 
 class ExhibitList : AppCompatActivity() {
 
-    private val model = ExhibitListViewModel()
+    private val exhibits: ArrayList<Exhibits> = ExhibitListViewModel().exhibits.value!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +31,7 @@ class ExhibitList : AppCompatActivity() {
 
     private fun initRecyclerView() {
         exhibitListView.layoutManager = LinearLayoutManager(this)
-        exhibitListView.adapter = ExhibitRecyclerViewAdapter(model.getExhibits().value!!)
+        exhibitListView.adapter = ExhibitRecyclerViewAdapter(exhibits)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

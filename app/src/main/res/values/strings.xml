@@ -3,12 +3,11 @@
 
 
     <!-- Animal Descriptions -->
-    <string name="african_painted_dog_des">African painted dogs are an intelligent and social carnivore living in packs of 6–20 individuals. Although led by a breeding pair like wolves, the pack’s structure is defined through posturing and complex submission ceremonies instead of aggression. The old, injured, and pups are cared for by the entire pack, and the youngest always eats first.</string>
     <string name="california_sea_lion_des">California Sea Lions are mammals. They must breathe at the surface and hold their breath while underwater.</string>
     <string name="american_alligator_des">American alligators are predators with many special adaptations for hunting in dark waters.</string>
     <string name="aldabra_tortoise_des">Aldabra tortoises are specially adapted for island life.</string>
     <string name="african_penguin_des">African penguins are birds. Despite their heritage, they are aquatic predators and are specially adapted to life at sea.</string>
-    <string name="african_lion_des">Unlike other cats, lions are social animals that are specially adapted for communal life in the pride.</string>
+
     <string name="asian_elephant_des">Elephants have specialized adaptations to accommodate their large size.</string>
     <string name="chimp_des">Chimpanzees are social animals and specially adapted for communal troop life.</string>
     <string name="chinese_alligator_des">Chinese alligators are ectothermic; they rely on the outside environment to regulate their body temperatures.</string>
@@ -31,7 +30,21 @@
     <string name="settings_text">Settings</string>
 
     <!-- Legal Text -->
+    <string name="pricing_info">$12 for adults\n$8 for ages 3–11\n$10 for seniors 65+</string>
+    <string name="pricing_exceptions">Ages 2 and under are free\nTulsa Zoo Friends Members are free</string>
+    <string name="payment_methods">We accept Visa, MasterCard, American Express and Discover cards.\nWe’re sorry, but we cannot accept personal checks.\nTickets are nonrefundable.</string>
+    <string name="additional_information">For more information, contact Admissions at (918) 669–6602</string>
     <string name="purchase_disclosure">Tickets are valid during regular zoo hours only, and may not be used for special events or after hour events. Children age 2 and under are free. Tulsa Zoo Members are free.</string>
     <string name="zoo_availability">The Tulsa Zoo is open 363 days a year. The zoo is only closed on Christmas Day and the third Friday in June.</string>
+
+
+    <!-- Animal Information -->
+
+    <!-- African Lion -->
+    <string name="african_lion_des">Unlike other cats, lions are social animals that are specially adapted for communal life in the pride.</string>
+
+    <!-- African Painted Dog -->
+    <string name="african_painted_dog_des">African painted dogs are an intelligent and social carnivore living in packs of 6–20 individuals. Although led by a breeding pair like wolves, the pack’s structure is defined through posturing and complex submission ceremonies instead of aggression. The old, injured, and pups are cared for by the entire pack, and the youngest always eats first.</string>
+
 
 </resources>

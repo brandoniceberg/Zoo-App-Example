@@ -38,7 +38,16 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.style.layers.LineLayer
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
+import kotlinx.android.synthetic.main.activity_animal_map.*
 import kotlinx.android.synthetic.main.activity_map.*
+import kotlinx.android.synthetic.main.activity_map.animalImageView
+import kotlinx.android.synthetic.main.activity_map.animalNameTextView
+import kotlinx.android.synthetic.main.activity_map.bionameTextView
+import kotlinx.android.synthetic.main.activity_map.descriptionTextView
+import kotlinx.android.synthetic.main.activity_map.foodImageView
+import kotlinx.android.synthetic.main.activity_map.habitatTextView
+import kotlinx.android.synthetic.main.activity_map.informationCard
+import kotlinx.android.synthetic.main.activity_map.statusImageView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -48,31 +57,31 @@ private const val TAG = "MapActivity"
 
 class MapActivity: AppCompatActivity(), OnMapReadyCallback, PermissionsListener, LocationEngineCallback<LocationEngineResult>{
 
-    private lateinit var mapView: MapView
-
-    private var animalName: String? = null
-    private var animalImage: String? = null
-    private var animalHabitat: String? = null
-    private var animalDescription: Int? = null
-    private var animalLongitude: Double? = null
-    private var animalLatitude: Double? = null
-    private var animalCoordiates: LatLng? = null
-    private var animalStatus: Int? = null
-    private var animalBioName: String? = null
-
     private lateinit var permissionsManager: PermissionsManager
 
-    private lateinit var directionsFeatureCollection: FeatureCollection
+    //MapBox Assets
+    private lateinit var mapView: MapView
 
     private lateinit var mapboxMap: MapboxMap
     private var locationEngine: LocationEngine? = null
     private lateinit var originLocation: Point
     private lateinit var desitination : Point
 
+
+    //Animal Assets
+    private lateinit var animalName: String
+    private lateinit var bioname: String
+    private lateinit var description: String
+    private lateinit var animalImgs: ArrayList<String>
+    private lateinit var animalHabitat: ArrayList<String>
+    private var animalLongitude: Double? = null
+    private var animalLatitude: Double? = null
+    private var animalCoordiates: LatLng? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Mapbox.getInstance(this, getString(R.string.access_token))
-        setContentView(R.layout.activity_map)
+        setContentView(R.layout.activity_animal_map)
         mapView = findViewById(R.id.map)
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
@@ -84,29 +93,30 @@ class MapActivity: AppCompatActivity(), OnMapReadyCallback, PermissionsListener,
 
         //import extras from previous activity
         val bundle: Bundle = intent.extras!!
-        animalName = bundle.getString("name")
-        animalDescription = bundle.getInt("description")
-        animalImage = bundle.getString("image")
-        animalHabitat = bundle.getString("habitat")
-        animalStatus = bundle.getInt("status")
-        animalLatitude = bundle.getDouble("latitude")
-        animalLongitude = bundle.getDouble("longitude")
-        animalBioName = bundle.getString("bioname")
-        animalCoordiates = LatLng(animalLatitude!!, animalLongitude!!)
-        val animalFood = bundle.getInt("food")
+        bundle.apply {
+            animalName = this.getString("name")!!
+            bioname = this.getString("bioname")!!
+            description = this.getString("description")!!
+            animalImgs = this.getStringArrayList("imgs")!!
+            animalHabitat = this.getStringArrayList("habitat")!!
+            animalLongitude = this.getDouble("longitude")
+            animalLatitude = this.getDouble("latitude")
+        }
+        if (animalLatitude != null && animalLongitude != null){
+            animalCoordiates = LatLng(animalLatitude!!, animalLongitude!!)
+        }
 
         //Fill views with information
-        Glide.with(this).load(animalImage).into(animalImageView)
         animalNameTextView.text = animalName
-        descriptionTextView.text = getString(animalDescription!!)
-        habitatTextView.text = "Native Habitat: $animalHabitat"
-        bionameTextView.text = animalBioName
-        foodImageView.setImageResource(animalFood)
-        statusImageView.setImageResource(animalStatus!!)
+        bionameTextView.text = bioname
+        descriptionTextView.text = description
+        Glide.with(this).load(animalImgs[0]).into(animalImageView)
+        habitatTextView.text = animalHabitat[0]
 
-        supportActionBar!!.setHomeAsUpIndicator(R.drawable.white_back_arrow)
-        supportActionBar!!.title = animalName
-        supportActionBar!!.setHomeButtonEnabled(true)
+
+        setSupportActionBar(toolbar)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.white_back_arrow)
+        supportActionBar?.setHomeButtonEnabled(true)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -139,13 +149,17 @@ class MapActivity: AppCompatActivity(), OnMapReadyCallback, PermissionsListener,
             }
         }
         //Define map settings
-        mapboxMap.uiSettings.isCompassEnabled = false
-        mapboxMap.uiSettings.isTiltGesturesEnabled = false
-        mapboxMap.uiSettings.isRotateGesturesEnabled = false
-        mapboxMap.uiSettings.isLogoEnabled = false
-        mapboxMap.uiSettings.attributionGravity = Gravity.BOTTOM
-        mapboxMap.setMaxZoomPreference(18.50)
-        mapboxMap.uiSettings.setAttributionMargins(0, 0 , 0 , 0)
+        mapboxMap.apply {
+            this.uiSettings.apply {
+                this.isCompassEnabled = false
+                this.isLogoEnabled = false
+                this.isTiltGesturesEnabled = false
+                this.isRotateGesturesEnabled = false
+                this.attributionGravity = Gravity.BOTTOM
+                this.setAttributionMargins(0, 0, 0, 0)
+            }
+            this.setMaxZoomPreference(18.50)
+        }
 
         desitination = Point.fromLngLat(animalLongitude!!, animalLatitude!!)
 
@@ -162,23 +176,6 @@ class MapActivity: AppCompatActivity(), OnMapReadyCallback, PermissionsListener,
             .build()
 
         mapboxMap.easeCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 200), 2500)
-    }
-
-    private fun drawNavigationPolylineRoute(route: DirectionsRoute) {
-        mapboxMap.getStyle {
-            val directionsRouteFeatureList: ArrayList<Feature> = arrayListOf()
-            val lineString: LineString = LineString.fromPolyline(route.geometry()!!, PRECISION_6)
-            val coordinates: List<Point> = lineString.coordinates()
-
-            for (i in coordinates.indices){
-                directionsRouteFeatureList.add(Feature.fromGeometry(LineString.fromLngLats(coordinates)))
-            }
-
-            directionsFeatureCollection = FeatureCollection.fromFeatures(directionsRouteFeatureList)
-            val source: GeoJsonSource = GeoJsonSource("SOURCE_ID")
-            source.setGeoJson(directionsFeatureCollection)
-
-        }
     }
 
     private fun enableLocation() {
@@ -199,7 +196,7 @@ class MapActivity: AppCompatActivity(), OnMapReadyCallback, PermissionsListener,
     }
 
     override fun onSuccess(result: LocationEngineResult?) {
-        val lat = result!!.lastLocation!!.latitude
+        val lat = result?.lastLocation!!.latitude
         val lng = result.lastLocation!!.longitude
         originLocation = Point.fromLngLat(lng, lat)
     }

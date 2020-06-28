@@ -8,15 +8,10 @@ import com.iceberg.zooapp.repositories.AnimalsActivityRepo
 
 class AnimalsActivityViewModel : ViewModel() {
 
-    private var animals: MutableLiveData<ArrayList<Animal>> = MutableLiveData()
     private val repo = AnimalsActivityRepo()
 
-    fun init(){
-        animals = repo.getAnimals()
-    }
+    val isLoading: LiveData<Boolean> = repo.isLoading
 
-    fun getAnimals(): LiveData<ArrayList<Animal>>{
-        return animals
-    }
+    val animals: LiveData<ArrayList<Animal>> = repo.getAnimals()
 
 }

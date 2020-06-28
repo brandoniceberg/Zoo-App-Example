@@ -1,30 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MapActivity">
+    android:fitsSystemWindows="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:mapbox="http://schemas.android.com/apk/res-auto">
 
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:background="@android:color/transparent"
+        app:titleTextColor="@android:color/white"
+        android:fitsSystemWindows="true"
+        app:title="@string/app_name"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"/>
 
     <com.mapbox.mapboxsdk.maps.MapView
         android:id="@+id/map"
+        android:fitsSystemWindows="true"
+        android:layout_width="match_parent"
+        android:layout_height="590dp"
         mapbox:mapbox_cameraTargetLat="36.2105907"
         mapbox:mapbox_cameraTargetLng="-95.9077825"
         mapbox:mapbox_cameraZoom="15.60"
-        mapbox:mapbox_cameraBearing="199.29"
-        android:layout_width="match_parent"
-        android:layout_height="500dp"/>
+        mapbox:mapbox_cameraBearing="199.29"/>
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/informationCard"
-        android:transitionName="animalCard"
-        app:cardCornerRadius="5pt"
+        android:fitsSystemWindows="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="15dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        style="@style/Widget.MaterialComponents.BottomSheet"
+        app:behavior_peekHeight="200dp"
+        app:behavior_hideable="false">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -136,6 +148,7 @@
 
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
-</LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

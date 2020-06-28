@@ -1,22 +1,19 @@
 package com.iceberg.zooapp.viewModels
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.iceberg.zooapp.models.Animal
 import com.iceberg.zooapp.repositories.ExhibitMapRepo
 
+private const val TAG = "ExhibitMapViewModel"
+
 class ExhibitMapViewModel: ViewModel() {
 
-    private var animals: MutableLiveData<ArrayList<Animal>> = MutableLiveData()
     private val repo = ExhibitMapRepo()
 
+    val isLoading: LiveData<Boolean> = repo.isLoading
 
-    fun init(exhibit: String) {
-        animals = repo.getAnimals(exhibit)
-    }
-
-    fun getAnimals(): LiveData<ArrayList<Animal>> {
-        return animals
+    fun getAnimals(exhibit: String): LiveData<ArrayList<Animal>> {
+        return repo.getAnimals(exhibit)
     }
 }

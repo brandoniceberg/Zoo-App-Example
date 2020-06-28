@@ -8,8 +8,11 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.*
 import com.iceberg.zooapp.adpaters.MapAdapter
+import com.iceberg.zooapp.models.Animal
 import com.iceberg.zooapp.viewModels.ExhibitMapViewModel
 import com.mapbox.android.core.location.LocationEngine
 import com.mapbox.android.core.location.LocationEngineCallback
@@ -20,6 +23,7 @@ import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.geojson.Point
 import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.annotations.MarkerOptions
+import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions
 import com.mapbox.mapboxsdk.maps.MapView
 import com.mapbox.mapboxsdk.maps.MapboxMap
@@ -37,11 +41,13 @@ private const val TAG = "ExhibitMapActivity"
 class ExhibitMapActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsListener, LocationEngineCallback<LocationEngineResult> {
 
     private lateinit var mapView: MapView
-    private var exhibitName: String? = null
+    private lateinit var exhibitName: String
     private lateinit var permissionsManager: PermissionsManager
     private val model = ExhibitMapViewModel()
     private var locationEngine: LocationEngine? = null
     private lateinit var originLocation: Point
+
+    private lateinit var animals: LiveData<ArrayList<Animal>>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,11 +56,21 @@ class ExhibitMapActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsL
 
         checkPermissionStatus()
 
+        //see if we are still loading from the network
+        model.isLoading.observe(this, Observer {
+            if (it){
+                showProgressBar()
+            }else {
+                hideProgressBar()
+                initRecyclerView()
+            }
+        })
+
         //Get information from previous activity
         val bundle: Bundle = intent.extras!!
-        exhibitName = bundle.getString("exhibit")
+        exhibitName = bundle.getString("exhibit")!!
 
-        model.init(exhibitName!!)
+        animals = model.getAnimals(exhibitName)
 
         val actionBar: ActionBar = supportActionBar!!
         actionBar.setHomeAsUpIndicator(R.drawable.white_back_arrow)
@@ -66,8 +82,14 @@ class ExhibitMapActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsL
         mapView = map
         map.onCreate(savedInstanceState)
         map.getMapAsync(this)
+    }
 
-        initRecyclerView()
+    private fun showProgressBar() {
+        progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideProgressBar() {
+        progressBar.visibility = View.GONE
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -82,18 +104,12 @@ class ExhibitMapActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsL
     private fun initRecyclerView(){
         val layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         mapRecyclerView.layoutManager = layoutManager
-        mapRecyclerView.adapter = MapAdapter(model.getAnimals().value!!, WeakReference(this))
+        mapRecyclerView.adapter = MapAdapter(animals.value!!, WeakReference(this))
 
         val snapHelper = PagerSnapHelper()
         snapHelper.attachToRecyclerView(mapRecyclerView)
 
         mapRecyclerView.overlay
-    }
-
-    private fun LinearSnapHelper.getSnapPosition(recyclerView: RecyclerView): Int {
-        val layoutManager = recyclerView.layoutManager ?: return RecyclerView.NO_POSITION
-        val snapView = findSnapView(layoutManager) ?: return RecyclerView.NO_POSITION
-        return layoutManager.getPosition(snapView)
     }
 
     @SuppressLint("MissingPermission")
@@ -112,23 +128,33 @@ class ExhibitMapActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsL
                 }
             }
         }
-        mapboxMap.uiSettings.isCompassEnabled = false
-        mapboxMap.uiSettings.isTiltGesturesEnabled = false
-        mapboxMap.uiSettings.isRotateGesturesEnabled = false
-        mapboxMap.uiSettings.isLogoEnabled = false
-        mapboxMap.setMaxZoomPreference(18.50)
-        //mapboxMap.setMinZoomPreference(15.60)
-        mapboxMap.uiSettings.setAttributionMargins(50, 0 , 0 , 500)
-
-        for (animal in model.getAnimals().value!!){
-            val animalLatitude = animal.latitude
-            val animalLongitude = animal.longitude
-            val animalName = animal.name
-            val animalLocation = com.mapbox.mapboxsdk.geometry.LatLng(animalLatitude!!, animalLongitude!!)
-            mapboxMap.addMarker(MarkerOptions().position(animalLocation).title("$animalName Exhibit"))
-
+        mapboxMap.uiSettings.apply {
+            this.isCompassEnabled = false
+            this.isTiltGesturesEnabled = false
+            this.isLogoEnabled = false
+            this.isRotateGesturesEnabled = false
+            this.setAttributionMargins(50, 0, 0, 500)
         }
+        mapboxMap.setMaxZoomPreference(18.50)
+
+        //TODO: Sort the animal list alphabetically
+        animals.observe(this, Observer {
+            if (it.size > 0) {
+                for (animal in animals.value!!) {
+                    //If animal has any location data; mark them on the map
+                    if (animal.longitude != null || animal.latitude != null){
+                        val animalLatitude = animal.latitude
+                        val animalLongitude = animal.longitude
+                        val animalName = animal.name
+                        val animalLocation = LatLng(animalLatitude!!, animalLongitude!!)
+                        mapboxMap.addMarker(MarkerOptions().position(animalLocation).title("$animalName Exhibit"))
+                    }
+                }
+            }
+        })
     }
+
+
     @SuppressLint("LogNotTimber")
     private fun checkPermissionStatus() {
         if (PermissionsManager.areLocationPermissionsGranted(this)) {

@@ -8,10 +8,10 @@
          location permissions for the 'MyLocation' functionality.
     -->
 
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <!-- Location Permissions -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <!-- Read & Write Permissions -->
@@ -31,6 +31,12 @@
         android:theme="@style/AppTheme"
         tools:targetApi="n">
         <activity android:name=".PlanATrip" android:theme="@style/TripTheme" android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.DIAL"/>
+            </intent-filter>
+
+
             <meta-data android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ExhibitList"/>
         </activity>
@@ -54,7 +60,7 @@
         <activity
             android:name=".MapActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MapTheme">
+            android:theme="@style/MaterialMapTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".AnimalsActivity" />
